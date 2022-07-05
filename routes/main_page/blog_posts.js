@@ -5,6 +5,8 @@ let blog_posts_controller = require("../../controllers/blog_posts_controller/blo
 /* GET blog posts page. */
 router.get('/', blog_posts_controller.blog_posts_get);
 
+router.get("/user/:username", blog_posts_controller.get_user_posts);
+
 router.get("/:id", blog_posts_controller.get_post)
 
 router.post('/', blog_posts_controller.blog_posts_post);

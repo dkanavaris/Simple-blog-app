@@ -73,7 +73,7 @@ delete_post_button.addEventListener('click', (e) => {
     fetch(url, {
         method: 'DELETE',
         headers: {
-        'Content-type': 'application/json; charset=UTF-8',
+        'Conten0t-type': 'application/json; charset=UTF-8',
         },
     })
     .then((response) => {
