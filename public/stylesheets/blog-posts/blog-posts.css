@@ -1,0 +1,38 @@
+ul *{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+li{
+    margin: 25px;
+    border: 2px solid black;
+
+}
+
+.title_container{
+    border-bottom: 2px solid black;
+
+}
+
+form *{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.post_options {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.get_post, .update_post{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Blog Posts</title>
+		<link rel='stylesheet' href='/stylesheets/blog-posts/blog-posts.css' />
+	</head>
+	<body>
+		<h1>Blog Posts go here</h1>
+		
+		<form action = "\blog-posts" method="POST">
+			<input type="text" name="title" placeholder="Post title" size="25">
+			<textarea class = "txt-area" type = "text" name = "new_post" rows="12" cols="70">
+			</textarea>
+			<input type="submit" value="Submit">
+		</form>
+
+		<div class = "post_options">
+			<div class = "get_post">
+				Get Post by Id
+				<input type = "text" class ="get_post_id" name ="get_post_id" placeholder="Post id" size = "25">
+				<button class = "post_id_button"> Get Post </button>
+			</div>
+	
+			<div class = "update_post">
+				Modify Post (Leave empty if no change is needed)
+				<input type = "text" class ="update_post_id" name ="update_post_id" placeholder="Post id" size = "25">
+				<input type = "text" class ="update_post_title" name ="update_post_title" placeholder="Post Title" size = "25">
+				<input type = "text" class ="update_post_contents" name ="update_post_contents" placeholder="Post Contents" size = "25">
+				<button class = "update_post_button"> Update Post </button>
+			</div>
+		</div>
+
+
+
+		<ul>
+			<% for(let i=0; i < posts.length; i++) { %>
+			<li id = <%= posts[i].id%>>
+				<div class = "title_container">(<%= posts[i].id%>) <%= posts[i].author%> : <%= posts[i].title%> </div>
+				<div class = "post_container"> <%= posts[i].content%></div>
+			</li>
+			<%}%>
+		</ul>
+	</body>
+
+	<script src="/javascripts/blog_post_script.js"></script> 
+</html>

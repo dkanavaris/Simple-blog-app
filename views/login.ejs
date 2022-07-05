@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+    	<title>Login</title>
+    	<link rel='stylesheet' href='/stylesheets/signup/signup.css' />
+  	</head>
+  	<body>
+    	<h1>Login</h1>
+        <div class = "main_container">
+
+			<div class = 'form_container'>
+
+				<% if(error){ %>
+					<div class = "error_container">
+						<div class = "message">
+							<%= error %>
+						</div>
+					</div>
+				<%}%>
+
+
+				<form method = "POST" action = "/">
+					<input type="text" name="username" placeholder="Username" size="25">
+					<input type="password" name="password" placeholder="Password" size="25">
+					<input type="submit" value="Submit">
+					<span id = "register">New user ?<a href = "/signup"> Register Here</a></span>
+				</form>
+			</div>
+		</div>
+    </body>
+</html>
