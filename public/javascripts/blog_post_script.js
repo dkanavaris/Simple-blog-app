@@ -41,11 +41,17 @@ update_post_button.addEventListener('click', (e) => {
     .then((response) => {
         if(response.status != 200)
             return;
-        response.json()})
+        return response.json()})
     .then((json) => {
         // Update the local post since server succeded
         console.log("Update it now")
+        console.log(json);
         let post = document.getElementById(post_id);
-        console.log(post.children);
+        children = post.children;
+        console.log(children[0].innerHTML)
+        let index = children[0].innerHTML.indexOf(":");
+        let old = children[0].innerHTML.substring(0, index + 2);
+        children[0].innerHTML = old + json.title;
+        children[1].innerHTML = json.content;
     })
 });
