@@ -11,4 +11,5 @@ router.post('/', blog_posts_controller.blog_posts_post);
 
 router.patch("/:id", blog_posts_controller.update_post);
 
+router.delete("/:id", blog_posts_controller.delete_post);
 module.exports = router;

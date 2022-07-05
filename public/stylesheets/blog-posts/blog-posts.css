@@ -30,7 +30,7 @@ form *{
     align-items: center;
 }
 
-.get_post, .update_post{
+.get_post, .update_post, .delete_post{
     display: flex;
     flex-direction: column;
     justify-content: center;

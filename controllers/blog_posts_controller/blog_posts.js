@@ -124,3 +124,19 @@ exports.update_post = async function(req, res, next){
 
     return res.status(200).send(JSON.stringify(updated));
 }
+
+exports.delete_post = async function(req, res, next){
+    cookie = await verify_cookie(req);
+
+    if(cookie == false){
+        return res.status(401).redirect("/");
+    }
+    let post_id = req.params.id;
+
+    let removed = await BlogPost_Model.remove({author : cookie.user, id : post_id});
+
+    if(!removed)
+        return res.status(405).send("");
+
+    return res.status(200).send("");
+}

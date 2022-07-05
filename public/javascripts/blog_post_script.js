@@ -1,5 +1,6 @@
 let post_id_button = document.querySelector(".post_id_button");
 
+//TODO: change urls of fetch to window href
 
 // Get a post by it's id
 post_id_button.addEventListener("click", (e) => {
@@ -12,7 +13,6 @@ post_id_button.addEventListener("click", (e) => {
     }
     
     let url = "http://localhost:3000/blog-posts/" + post_id;
-    console.log(url)
     location.href = url;
 });
 
@@ -54,4 +54,34 @@ update_post_button.addEventListener('click', (e) => {
         children[0].innerHTML = old + json.title;
         children[1].innerHTML = json.content;
     })
+
+    document.querySelector(".update_post_id").value = "";
+    document.querySelector(".update_post_title").value = "";
+    document.querySelector(".update_post_contents").value = "";
+
+});
+
+let delete_post_button = document.querySelector(".delete_post_button");
+
+delete_post_button.addEventListener('click', (e) => {
+    let post_id = document.querySelector(".delete_post_id").value;
+    let post = document.getElementById(post_id);
+
+    post_id.value= "";
+    let url = "http://localhost:3000/blog-posts/" + post_id;
+
+    fetch(url, {
+        method: 'DELETE',
+        headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+        },
+    })
+    .then((response) => {
+        if(response.status != 200)
+            return;
+        else
+            post.remove(); // Remove the post
+    })
+
+    document.querySelector(".delete_post_id").value = "";
 });
