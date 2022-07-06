@@ -38,6 +38,7 @@ exports.signup_post = async function(req, res, next){
         username: req.body.username,
         password: hashed_password,
         email : req.body.email,
+        last_post_id : 0
     }).save(err => {
         if (err) { 
             return next(err);

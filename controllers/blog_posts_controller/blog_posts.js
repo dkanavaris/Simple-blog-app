@@ -4,7 +4,6 @@ const User_Model = require("../../models/user_model.js");
 
 require('dotenv').config()
 
-let POST_ID = 0;
 
 async function verify_cookie(req){
 
@@ -27,8 +26,6 @@ async function verify_cookie(req){
     
     return cookie;
 }
-
-
 
 exports.blog_posts_get = async function(req, res, next){
 
@@ -56,12 +53,12 @@ exports.blog_posts_post = async function(req, res, next){
     let user = cookie.user;
     let title = req.body.title;
     
-    console.log(`${user} wrote ${title}:${post}`);
+    let db_user = await User_Model.findOne({username : user});
 
     const blog_post = new BlogPost_Model({
         author : user,
         content : post,
-        id : POST_ID,
+        id : db_user.last_post_id,
         title : title
     }).save(err => {
         if(err){
@@ -69,7 +66,9 @@ exports.blog_posts_post = async function(req, res, next){
         }
     });
 
-    POST_ID++;
+
+    await User_Model.findOneAndUpdate({username : user},
+                                      {$inc : {last_post_id : 1}});
 
     return res.redirect("/blog-posts");
 }
