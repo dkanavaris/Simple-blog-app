@@ -1,6 +1,6 @@
-let express = require('express');
-let router = express.Router();
-let blog_posts_controller = require("../../controllers/blog_posts_controller/blog_posts.js")
+const express = require('express');
+const router = express.Router();
+const blog_posts_controller = require("../../controllers/blog_posts_controller/blog_posts.js")
 
 /* GET blog posts page. */
 router.get('/', blog_posts_controller.blog_posts_get);

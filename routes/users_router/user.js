@@ -1,7 +1,6 @@
-let express = require('express');
-let router = express.Router();
-let user_controller = require("../../controllers/user_controller/user.js")
-
+const express = require('express');
+const router = express.Router();
+const user_controller = require("../../controllers/user_controller/user.js")
 
 router.get('/:username/blog-posts', user_controller.get_user_posts);
 
