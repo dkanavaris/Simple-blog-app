@@ -1,5 +1,5 @@
-let User_Model = require("../../models/user_model")
-let bcrypt = require("bcrypt");
+const User_Model = require("../../models/user_model")
+const bcrypt = require("bcrypt");
 
 exports.signup_get = function(req, res, next){
     res.status(200).render("signup", {error: ""})
