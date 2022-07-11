@@ -9,6 +9,8 @@ require('dotenv').config()
 let connection;
 let db;
 
+jest.setTimeout(10000)
+
 beforeAll(async () => {
    
 	const mongoDb = process.env.TEST_DB_URL;
@@ -171,8 +173,6 @@ describe("Test login and sign-up", () => {
 		});
 	});
 });
-
-
 
 
 describe("Test blogs posts path", () => {
