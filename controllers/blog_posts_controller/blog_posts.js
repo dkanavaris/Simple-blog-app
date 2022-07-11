@@ -38,7 +38,10 @@ exports.blog_posts_get = async function(req, res, next){
     let posts = await BlogPost_Model.find({author : cookie.user});
 
     // add route here for blog posts on views
-    res.render("blog-posts", {posts: posts, actions: true});
+    //res.status(200 || 500);
+
+    return res.status(200).render("blog-posts", {posts: posts, actions: true});
+
 }
 
 exports.blog_posts_post = async function(req, res, next){
@@ -70,7 +73,7 @@ exports.blog_posts_post = async function(req, res, next){
     await User_Model.findOneAndUpdate({username : user},
                                       {$inc : {last_post_id : 1}});
 
-    return res.redirect("/blog-posts");
+    return res.status(200).redirect("/blog-posts");
 }
 
 exports.get_post = async function(req, res, next){
@@ -86,7 +89,7 @@ exports.get_post = async function(req, res, next){
     let post = await BlogPost_Model.find({author : cookie.user, id: post_id});
 
     // add route here for blog posts on views
-    res.render("blog-posts", {posts: post, actions : false});
+    res.status(200).render("blog-posts", {posts: post, actions : false});
 }
 
 exports.update_post = async function(req, res, next){
@@ -153,6 +156,6 @@ exports.get_user_posts = async function(req, res, next) {
     let posts = await BlogPost_Model.find({author : req.params.username});
 
     // add route here for blog posts on views
-    res.render("blog-posts", {posts: posts, actions : false});
+    res.status(200).render("blog-posts", {posts: posts, actions : false});
 
 }

@@ -30,5 +30,6 @@ exports.login_post = async function(req, res, next){
                                           HttpOnly: true,
                                           SameSite: "Lax"});
     
+    //console.log("Successfull login")
     return res.status(200).redirect("/blog-posts")
 }

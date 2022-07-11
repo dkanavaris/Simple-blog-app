@@ -12,10 +12,12 @@ const signupRouter = require("./routes/signup_router/signup");
 const mainPageRouter = require("./routes/main_page/blog_posts");
 
 /* Connect to DB*/
-const mongoDb = process.env.DB_URL;
-mongoose.connect(mongoDb, { useUnifiedTopology: true, useNewUrlParser: true });
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "mongo connection error"));
+if(process.env.TESTING == "false"){
+  const mongoDb = process.env.DB_URL;
+  mongoose.connect(mongoDb, { useUnifiedTopology: true, useNewUrlParser: true });
+  const db = mongoose.connection;
+  db.on("error", console.error.bind(console, "mongo connection error"));
+}
 
 const app = express();
 

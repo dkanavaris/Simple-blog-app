@@ -33,7 +33,7 @@ exports.signup_post = async function(req, res, next){
 
     hashed_password = bcrypt.hashSync(password, 12);
 
-    const User = new User_Model({
+    const User = await new User_Model({
         username: req.body.username,
         password: hashed_password,
         email : req.body.email,
@@ -43,5 +43,6 @@ exports.signup_post = async function(req, res, next){
             return next(err);
         }
     });
+
     return res.status(200).redirect("/");
 }
