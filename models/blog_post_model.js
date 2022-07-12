@@ -8,4 +8,4 @@ let BlogPost_Model = new Schema({
     content : String
 });
 
-module.exports = mongoose.model("blog-posts", BlogPost_Model);
+module.exports = BlogPost_Model;

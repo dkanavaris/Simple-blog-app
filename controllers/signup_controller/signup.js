@@ -1,4 +1,3 @@
-const User_Model = require("../../models/user_model")
 const bcrypt = require("bcrypt");
 
 exports.signup_get = function(req, res, next){
@@ -8,13 +7,14 @@ exports.signup_get = function(req, res, next){
 
 exports.signup_post = async function(req, res, next){
 
-    username = req.body.username;
-    password = req.body.password;
-    confirm_password = req.body.confirm_password;
-    email = req.body.email;
+    const username = req.body.username;
+    const password = req.body.password;
+    const confirm_password = req.body.confirm_password;
+    const email = req.body.email;
+    const db = res.locals.db;
 
     /* Check if username already exists */
-    const username_exists = await User_Model.exists({username: username});
+    const username_exists = await db.User_Model.exists({username: username});
     if(username_exists){
         return res.status(406).render("signup", {error : "Username already exists"});
     }
@@ -25,7 +25,7 @@ exports.signup_post = async function(req, res, next){
     }
 
     /* Check if email or username already exist */
-    const email_exists = await User_Model.exists({email:email});
+    const email_exists = await db.User_Model.exists({email:email});
     if(email_exists){
         return res.status(406).render("signup", {error : "Email already in use"});
     }
@@ -33,7 +33,7 @@ exports.signup_post = async function(req, res, next){
 
     hashed_password = bcrypt.hashSync(password, 12);
 
-    const User = await new User_Model({
+    const User = await new db.User_Model({
         username: req.body.username,
         password: hashed_password,
         email : req.body.email,

@@ -1,4 +1,3 @@
-const User_Model = require("../../models/user_model.js");
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 require('dotenv').config()
@@ -15,7 +14,9 @@ exports.login_post = async function(req, res, next){
     let username = req.body.username;
     let password = req.body.password;
     
-    user = await User_Model.findOne({ username: username });
+    const db = res.locals.db;
+
+    user = await db.User_Model.findOne({ username: username });
 
     if(!user){
         return res.status(406).render("login", {error: "User does not exist"});

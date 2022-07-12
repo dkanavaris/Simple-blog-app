@@ -13,12 +13,15 @@ const mainPageRouter = require("./routes/main_page/blog_posts");
 const dependencyInjection = require("./dependencyInjection");
 const blogDB = require("./blogDB");
 
+let db;
 /* Connect to DB*/
 if(process.env.TESTING == "false"){
   // const mongoDb = process.env.DB_URL;
   // mongoose.connect(mongoDb, { useUnifiedTopology: true, useNewUrlParser: true });
   // const db = mongoose.connection;
   // db.on("error", console.error.bind(console, "mongo connection error"));
+  db = new blogDB(process.env.DB_URL);
+  db.connect();
 
 }
 
@@ -35,10 +38,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Inject a database dependencies.
-app.use('/', dependencyInjection("Hello dependency", "db"), loginRouter);
-app.use('/signup', dependencyInjection("Hello dependency", "db"), signupRouter)
-app.use('/blog-posts', dependencyInjection("Hello dependency", "db"), mainPageRouter);
-app.use('/user', dependencyInjection("Hello dependency", "db"), usersRouter)
+app.use('/', dependencyInjection(db, "db"), loginRouter);
+app.use('/signup', dependencyInjection(db, "db"), signupRouter)
+app.use('/blog-posts', dependencyInjection(db, "db"), mainPageRouter);
+app.use('/user', dependencyInjection(db, "db"), usersRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

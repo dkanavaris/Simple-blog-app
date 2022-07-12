@@ -1,13 +1,13 @@
 const jwt = require('jsonwebtoken');
-const BlogPost_Model = require("../../models/blog_post_model.js");
-const User_Model = require("../../models/user_model.js");
 
 require('dotenv').config()
 
 
-async function verify_cookie(req){
+async function verify_cookie(req, res){
 
     let cookie = (req.cookies["blog-auth-token"]);
+    const db = res.locals.db;
+
     if(!cookie)
         return false
 
@@ -19,7 +19,7 @@ async function verify_cookie(req){
         return false;
 
     //user id not in DB
-    let user = await User_Model.findOne({ username: cookie.user });
+    let user = await db.User_Model.findOne({ username: cookie.user });
 
     if(!user)
         return false;
@@ -29,13 +29,14 @@ async function verify_cookie(req){
 
 exports.blog_posts_get = async function(req, res, next){
 
-    let cookie = await verify_cookie(req);
+    let cookie = await verify_cookie(req, res);
+    const db = res.locals.db;
 
     if(cookie == false){
         return res.status(401).redirect("/");
     }
 
-    let posts = await BlogPost_Model.find({author : cookie.user});
+    let posts = await db.BlogPost_Model.find({author : cookie.user});
 
     // add route here for blog posts on views
     //res.status(200 || 500);
@@ -46,7 +47,8 @@ exports.blog_posts_get = async function(req, res, next){
 
 exports.blog_posts_post = async function(req, res, next){
 
-    let cookie = await verify_cookie(req);
+    let cookie = await verify_cookie(req,res);
+    const db = res.locals.db;
 
     if(cookie == false){
         return res.status(401).redirect("/");
@@ -56,9 +58,9 @@ exports.blog_posts_post = async function(req, res, next){
     let user = cookie.user;
     let title = req.body.title;
     
-    let db_user = await User_Model.findOne({username : user});
+    let db_user = await db.User_Model.findOne({username : user});
 
-    const blog_post = new BlogPost_Model({
+    const blog_post = new db.BlogPost_Model({
         author : user,
         content : post,
         id : db_user.last_post_id,
@@ -70,7 +72,7 @@ exports.blog_posts_post = async function(req, res, next){
     });
 
 
-    await User_Model.findOneAndUpdate({username : user},
+    await db.User_Model.findOneAndUpdate({username : user},
                                       {$inc : {last_post_id : 1}});
 
     return res.status(200).redirect("/blog-posts");
@@ -80,13 +82,14 @@ exports.get_post = async function(req, res, next){
 
     let post_id = req.params.id;
 
-    let cookie = await verify_cookie(req);
+    let cookie = await verify_cookie(req, res);
+    const db = res.locals.db;
 
     if(cookie == false){
         return res.status(401).redirect("/");
     }
 
-    let post = await BlogPost_Model.find({author : cookie.user, id: post_id});
+    let post = await db.BlogPost_Model.find({author : cookie.user, id: post_id});
 
     // add route here for blog posts on views
     res.status(200).render("blog-posts", {posts: post, actions : false});
@@ -94,7 +97,8 @@ exports.get_post = async function(req, res, next){
 
 exports.update_post = async function(req, res, next){
 
-    cookie = await verify_cookie(req);
+    cookie = await verify_cookie(req, res);
+    const db = res.locals.db;
 
     if(cookie == false){
         return res.status(401).redirect("/");
@@ -107,7 +111,7 @@ exports.update_post = async function(req, res, next){
     let user = cookie.user;
 
 
-    let post = await BlogPost_Model.findOne({author : user, id: post_id});
+    let post = await db.BlogPost_Model.findOne({author : user, id: post_id});
 
     if(!post){
         return res.status(401).send(JSON.stringify("Post not found"));
@@ -121,7 +125,7 @@ exports.update_post = async function(req, res, next){
     if(post_content == "")
         updated_content = post.content
 
-    let updated = await BlogPost_Model.findOneAndUpdate({author : user, id : post_id},
+    let updated = await db.blog_posts_getBlogPost_Model.findOneAndUpdate({author : user, id : post_id},
                                                         {title : updated_title,
                                                         content : updated_content},
                                                         {new : true});
@@ -130,14 +134,15 @@ exports.update_post = async function(req, res, next){
 }
 
 exports.delete_post = async function(req, res, next){
-    cookie = await verify_cookie(req);
+    cookie = await verify_cookie(req, res);
+    const db = res.locals.db;
 
     if(cookie == false){
         return res.status(401).redirect("/");
     }
     let post_id = req.params.id;
 
-    let removed = await BlogPost_Model.remove({author : cookie.user, id : post_id});
+    let removed = await db.BlogPost_Model.remove({author : cookie.user, id : post_id});
 
     if(!removed)
         return res.status(405).send("");
@@ -147,13 +152,14 @@ exports.delete_post = async function(req, res, next){
 
 exports.get_user_posts = async function(req, res, next) {
     
-    let cookie = await verify_cookie(req);
-    
+    let cookie = await verify_cookie(req, res);
+    const db = res.locals.db;
+
     if(cookie == false){
         return res.status(401).redirect("/");
     }
 
-    let posts = await BlogPost_Model.find({author : req.params.username});
+    let posts = await db.BlogPost_Model.find({author : req.params.username});
 
     // add route here for blog posts on views
     res.status(200).render("blog-posts", {posts: posts, actions : false});
