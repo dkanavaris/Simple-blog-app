@@ -1,7 +1,7 @@
 const request = require("supertest");
 const app = require("./app.js");
-const User_Model = require("./models/user_model")
 const bcrypt = require("bcrypt");
+const blogDB = require("./blogDB");
 
 const mongoose = require('mongoose');
 require('dotenv').config()
@@ -9,18 +9,16 @@ require('dotenv').config()
 let connection;
 let db;
 
-jest.setTimeout(10000)
+jest.setTimeout(1000000)
 
 beforeAll(async () => {
    
-	const mongoDb = process.env.TEST_DB_URL;
-	connection =  mongoose.connect(mongoDb, { useUnifiedTopology: true, useNewUrlParser: true });
-	db = mongoose.connection;
-	db.on("error", console.error.bind(console, "mongo connection error"));
+	db = new blogDB(process.env.TEST_DB_URL);
+	db.connect();
 
 	let hashed_password = bcrypt.hashSync("test", 12);
 	// Add an existing user to the DB
-	const User = await new User_Model({
+	const User = await new db.User_Model({
 		username: "jim",
 		password: hashed_password,
 		email : "dkana@gmail.com",
@@ -175,98 +173,98 @@ describe("Test login and sign-up", () => {
 });
 
 
-describe("Test blogs posts path", () => {
+// describe("Test blogs posts path", () => {
 
-	let { header } = "";
+// 	let { header } = "";
 
 
-	beforeAll(async () => {
-		const user_info = {
-			username : "test",
-			password : "test"
-		};
+// 	beforeAll(async () => {
+// 		const user_info = {
+// 			username : "test",
+// 			password : "test"
+// 		};
 			
-		const logged = await request(app).post("/").send(user_info);
+// 		const logged = await request(app).post("/").send(user_info);
 
-		// Get cookies from response
-		({header} = logged);
+// 		// Get cookies from response
+// 		({header} = logged);
 
-	});
+// 	});
 
-	describe("Test the blog-posts main page", () => {
-		test("It should respond the GET method", async () => {
+// 	describe("Test the blog-posts main page", () => {
+// 		test("It should respond the GET method", async () => {
 
-			const response = await request(app)
-			.get("/blog-posts")
-			.set("Cookie", [...header["set-cookie"]]) // this line I add cookies...
-			expect(response.statusCode).toBe(200);
-		});
-	});
+// 			const response = await request(app)
+// 			.get("/blog-posts")
+// 			.set("Cookie", [...header["set-cookie"]]) // this line I add cookies...
+// 			expect(response.statusCode).toBe(200);
+// 		});
+// 	});
 
-	describe("Test creating a new post", () => {
-		test("It should respond with 302 status", async () => {
+// 	describe("Test creating a new post", () => {
+// 		test("It should respond with 302 status", async () => {
 
-			const response = await request(app)
-			.post("/blog-posts")
-			.set("Cookie", [...header["set-cookie"]]) // this line I add cookies...
-			.send({
-				body : "New post",
-				title : "New title"
-			});
-			expect(response.statusCode).toBe(302);
-		});
-	});
-
-
-	describe("Test getting an existing post", () => {
-		test("It should respond with 200 status", async () => {
-
-			const response = await request(app)
-			.get("/blog-posts/0")
-			.set("Cookie", [...header["set-cookie"]]) // this line I add cookies...
-			expect(response.statusCode).toBe(200);
-		});
-	});
-
-	describe("Test getting a user's post", () => {
-		test("It should respond with 200 status", async () => {
-
-			const response = await request(app)
-			.get("/blog-posts/user/test")
-			.set("Cookie", [...header["set-cookie"]]) // this line I add cookies...
-			expect(response.statusCode).toBe(200);
-		});
-	});
+// 			const response = await request(app)
+// 			.post("/blog-posts")
+// 			.set("Cookie", [...header["set-cookie"]]) // this line I add cookies...
+// 			.send({
+// 				body : "New post",
+// 				title : "New title"
+// 			});
+// 			expect(response.statusCode).toBe(302);
+// 		});
+// 	});
 
 
-	describe("Test patching a user's post", () => {
-		test("It should respond with 200 status", async () => {
+// 	describe("Test getting an existing post", () => {
+// 		test("It should respond with 200 status", async () => {
 
-			const response = await request(app)
-			.patch("/blog-posts/0")
-			.set("Cookie", [...header["set-cookie"]]) // this line I add cookies...
-			.send({
-				id : 0,
-				title : "Updated Title",
-				contents : "Updated Content"
-			})
-			expect(response.statusCode).toBe(200);
-		});
-	});
+// 			const response = await request(app)
+// 			.get("/blog-posts/0")
+// 			.set("Cookie", [...header["set-cookie"]]) // this line I add cookies...
+// 			expect(response.statusCode).toBe(200);
+// 		});
+// 	});
 
-	describe("Test deleting a user's post", () => {
-		test("It should respond with 200 status", async () => {
+// 	describe("Test getting a user's post", () => {
+// 		test("It should respond with 200 status", async () => {
 
-			const response = await request(app)
-			.delete("/blog-posts/0")
-			.set("Cookie", [...header["set-cookie"]]) // this line I add cookies...
-			.send({
-				id : 0,
-			})
-			expect(response.statusCode).toBe(200);
-		});
-	});
+// 			const response = await request(app)
+// 			.get("/blog-posts/user/test")
+// 			.set("Cookie", [...header["set-cookie"]]) // this line I add cookies...
+// 			expect(response.statusCode).toBe(200);
+// 		});
+// 	});
 
-});
+
+// 	describe("Test patching a user's post", () => {
+// 		test("It should respond with 200 status", async () => {
+
+// 			const response = await request(app)
+// 			.patch("/blog-posts/0")
+// 			.set("Cookie", [...header["set-cookie"]]) // this line I add cookies...
+// 			.send({
+// 				id : 0,
+// 				title : "Updated Title",
+// 				contents : "Updated Content"
+// 			})
+// 			expect(response.statusCode).toBe(200);
+// 		});
+// 	});
+
+// 	describe("Test deleting a user's post", () => {
+// 		test("It should respond with 200 status", async () => {
+
+// 			const response = await request(app)
+// 			.delete("/blog-posts/0")
+// 			.set("Cookie", [...header["set-cookie"]]) // this line I add cookies...
+// 			.send({
+// 				id : 0,
+// 			})
+// 			expect(response.statusCode).toBe(200);
+// 		});
+// 	});
+
+// });
 
 

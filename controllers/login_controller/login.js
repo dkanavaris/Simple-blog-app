@@ -4,8 +4,6 @@ require('dotenv').config()
 
 exports.login_get = function(req, res, next){
 
-    console.log("Hello");
-    console.log(res.locals);
     res.status(200).render("login", {error: ""})
 }
 
