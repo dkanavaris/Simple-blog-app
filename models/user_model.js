@@ -8,4 +8,4 @@ let User_Model = new Schema({
     last_post_id : Number
 });
 
-module.exports = mongoose.model("users", User_Model);
+module.exports = User_Model;

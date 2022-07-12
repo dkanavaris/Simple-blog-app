@@ -10,13 +10,16 @@ const usersRouter = require('./routes/users_router/user');
 const loginRouter = require("./routes/login_router/login");
 const signupRouter = require("./routes/signup_router/signup");
 const mainPageRouter = require("./routes/main_page/blog_posts");
+const dependencyInjection = require("./dependencyInjection");
+const blogDB = require("./blogDB");
 
 /* Connect to DB*/
 if(process.env.TESTING == "false"){
-  const mongoDb = process.env.DB_URL;
-  mongoose.connect(mongoDb, { useUnifiedTopology: true, useNewUrlParser: true });
-  const db = mongoose.connection;
-  db.on("error", console.error.bind(console, "mongo connection error"));
+  // const mongoDb = process.env.DB_URL;
+  // mongoose.connect(mongoDb, { useUnifiedTopology: true, useNewUrlParser: true });
+  // const db = mongoose.connection;
+  // db.on("error", console.error.bind(console, "mongo connection error"));
+
 }
 
 const app = express();
@@ -31,10 +34,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', loginRouter);
-app.use('/signup', signupRouter)
-app.use('/blog-posts', mainPageRouter);
-app.use('/user', usersRouter)
+// Inject a database dependencies.
+app.use('/', dependencyInjection("Hello dependency", "db"), loginRouter);
+app.use('/signup', dependencyInjection("Hello dependency", "db"), signupRouter)
+app.use('/blog-posts', dependencyInjection("Hello dependency", "db"), mainPageRouter);
+app.use('/user', dependencyInjection("Hello dependency", "db"), usersRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
