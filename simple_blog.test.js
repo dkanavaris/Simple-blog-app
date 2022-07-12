@@ -39,7 +39,7 @@ afterAll(async () => {
 describe("Test login and sign-up", () => {
 
 	describe("Test the root path", () => {
-		test("It should response the GET method", () => {
+		test("It should respond the GET method", () => {
 		return request(app)
 			.get("/")
 			.then(response => {
@@ -194,7 +194,7 @@ describe("Test blogs posts path", () => {
 	});
 
 	describe("Test the blog-posts main page", () => {
-		test("It should response the GET method", async () => {
+		test("It should respond the GET method", async () => {
 
 			const response = await request(app)
 			.get("/blog-posts")
@@ -204,7 +204,7 @@ describe("Test blogs posts path", () => {
 	});
 
 	describe("Test creating a new post", () => {
-		test("It should response with 302 status", async () => {
+		test("It should respond with 302 status", async () => {
 
 			const response = await request(app)
 			.post("/blog-posts")
@@ -219,7 +219,7 @@ describe("Test blogs posts path", () => {
 
 
 	describe("Test getting an existing post", () => {
-		test("It should response with 200 status", async () => {
+		test("It should respond with 200 status", async () => {
 
 			const response = await request(app)
 			.get("/blog-posts/0")
@@ -228,8 +228,8 @@ describe("Test blogs posts path", () => {
 		});
 	});
 
-	describe("Test getting an user posts", () => {
-		test("It should response with 200 status", async () => {
+	describe("Test getting a user's post", () => {
+		test("It should respond with 200 status", async () => {
 
 			const response = await request(app)
 			.get("/blog-posts/user/test")
@@ -239,8 +239,8 @@ describe("Test blogs posts path", () => {
 	});
 
 
-	describe("Test patching a user posts", () => {
-		test("It should response with 200 status", async () => {
+	describe("Test patching a user's post", () => {
+		test("It should respond with 200 status", async () => {
 
 			const response = await request(app)
 			.patch("/blog-posts/0")
@@ -254,8 +254,8 @@ describe("Test blogs posts path", () => {
 		});
 	});
 
-	describe("Test deleting a user posts", () => {
-		test("It should response with 200 status", async () => {
+	describe("Test deleting a user's post", () => {
+		test("It should respond with 200 status", async () => {
 
 			const response = await request(app)
 			.delete("/blog-posts/0")
